@@ -190,14 +190,28 @@ async def main():
 
 async def main():
     init_db()
-    # ... ваш код ...
-    print("🚀 Бот запущен!")
-
-    # ЗАПУСКАЕМ ВЕБ-СЕРВЕР ДЛЯ RENDER
-    keep_alive()
-
-    # ЗАПУСКАЕМ САМОГО БОТА (ПОЛЛИНГ)
-    await dp.start_polling(bot)
     
+    # Проверяем бота в канале
+    try:
+        chat = await bot.get_chat(CHANNEL_ID)
+        print(f"✅ Бот подключен к каналу: {chat.title}")
+    except Exception as e:
+        print(f"⚠️ Ошибка: бот не админ канала! {e}")
+    
+    print("🚀 Бот запущен!")
+    print(f"🤖 Бот: https://t.me/miuru_referal_bot")
+    print(f"📢 Канал: {CHANNEL_URL}")
+    
+    # 👇 ДОБАВЬТЕ ЭТИ ДВЕ СТРОЧКИ 👇
+    # Удаляем вебхук, если он был установлен
+    await bot.delete_webhook(drop_pending_updates=True)
+    print("✅ Вебхук удалён, начинаем polling...")
+    
+    # Запускаем веб-сервер для Render
+    keep_alive()
+    
+    # Запускаем бота
+    await dp.start_polling(bot)
+
 if __name__ == "__main__":
     asyncio.run(main())
