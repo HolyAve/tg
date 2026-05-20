@@ -4,7 +4,7 @@ from aiogram import Bot, Dispatcher, types
 from aiogram.filters import Command
 from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 from aiogram.enums import ChatMemberStatus
-
+from web_server import keep_alive
 from config import BOT_TOKEN, CHANNEL_ID, CHANNEL_URL, BOT_USERNAME
 from database import init_db, register_user, get_points, deactivate_user, get_referrer, get_top_users, user_exists
 
@@ -188,5 +188,16 @@ async def main():
     
     await dp.start_polling(bot)
 
+async def main():
+    init_db()
+    # ... ваш код ...
+    print("🚀 Бот запущен!")
+
+    # ЗАПУСКАЕМ ВЕБ-СЕРВЕР ДЛЯ RENDER
+    keep_alive()
+
+    # ЗАПУСКАЕМ САМОГО БОТА (ПОЛЛИНГ)
+    await dp.start_polling(bot)
+    
 if __name__ == "__main__":
     asyncio.run(main())
